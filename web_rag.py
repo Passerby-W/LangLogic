@@ -1,21 +1,33 @@
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.document_loaders import WebBaseLoader
 from langchain.vectorstores import Chroma
-from embedding import OpenAIEmbedding
-from llm import OpenAILLM
 from langsmith.run_helpers import traceable
 import os
 from utils import get_config
 from manager import OpenAIManager
 from typing import Tuple
+from embedding import OpenAIEmbedding
+from llm import OpenAILLM
 
-os.environ["LANGCHAIN_TRACING_V2"] = "true"
+
+os.environ["LANGCHAIN_ENDPOINT"] = "https://api.smith.langchain.com"
 os.environ["LANGCHAIN_API_KEY"] = get_config("KEY_LANGSMITH")
-os.environ["LANGCHAIN_PROJECT"] = "test"
+os.environ["LANGCHAIN_TRACING_V2"] = "true"
+os.environ["LANGCHAIN_PROJECT"] = "web_rag"
 
 manager = OpenAIManager()
 llm = OpenAILLM()
 embedding = OpenAIEmbedding()
+
+import chromadb
+chroma_client = chromadb.Client()
+collection = chroma_client.create_collection(name="my_collection")
+from chromadb import Documents, EmbeddingFunction, Embeddings
+
+class MyEmbeddingFunction(EmbeddingFunction):
+    def __call__(self, texts: Documents) -> Embeddings:
+        # embed the documents somehow
+        return embeddings
 
 
 @traceable(run_type="llm", name="openai.ChatCompletion.create")
@@ -102,12 +114,12 @@ def qa_chain(query, content):
 
 
 @traceable(run_type="chain")
-def url_rag(urls: Tuple, query) -> str:
+def main_chain(urls: Tuple, query) -> str:
     db = preprocessing_chain(urls)
     content = retrial_chain(query, db)
     ans = qa_chain(query, content)
     return ans
 
 
-a = url_rag(("https://www.zhihu.com/question/633391682/answer/3314363232",), "总结一下这篇文章的内容")
+a = main_chain(("https://zhuanlan.zhihu.com/p/670803806",), "通俗易懂的给我解释下这篇文章的公式")
 print(a)

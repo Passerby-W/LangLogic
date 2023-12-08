@@ -1,5 +1,5 @@
-from utils import get_config
 from openai import OpenAI
+from utils import get_config
 
 api_keys = get_config("KEY_OPENAI")
 
@@ -24,14 +24,15 @@ class OpenAIManager:
                 return completion
             except (Exception,):
                 self.current_key_index = (self.current_key_index + 1) % n
-                pass
-        raise ValueError("All keys are invalid or not support the model")
+
+        raise ValueError("[Chat]All keys are invalid or not support the model")
 
     def embedding(self, *args, **kwargs):
         if "model" not in kwargs:
             raise KeyError("No model specified in the parameters")
         if "input" not in kwargs:
             raise KeyError("No input specified in the parameters")
+
         n = len(self.api_keys)
         for _ in range(n):
             client = OpenAI(api_key=self.api_keys[self.current_key_index])
@@ -41,8 +42,8 @@ class OpenAIManager:
                 return completion
             except (Exception,):
                 self.current_key_index = (self.current_key_index + 1) % n
-                pass
-        raise ValueError("All keys are invalid or not support the model")
+
+        raise ValueError("[Embedding]All keys are invalid or not support the model")
 
 
 if __name__ == "__main__":

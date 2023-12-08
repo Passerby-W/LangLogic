@@ -9,7 +9,7 @@ def get_config(key):
     :return: The value of the specified key from the JSON file, or None if the key does not exist.
     """
     try:
-        # Open the JSON file and load the data
+        # Open the JSON file and load the test_data
         with open("config.json", 'r') as file:
             config_data = json.load(file)
 
