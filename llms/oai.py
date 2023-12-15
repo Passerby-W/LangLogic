@@ -10,6 +10,10 @@ class OaiLLM(LLM):
         self.name = "openai"
         self._keys = keys
         self.key_index = 0
+        self._encoding = tiktoken.get_encoding("cl100k_base")
+
+    def _count_tokens(self, message: Massage) -> int:
+        return 3 + len(self._encoding.encode(message["content"]))
 
     def chat(self,
              prompt: str,
@@ -20,7 +24,7 @@ class OaiLLM(LLM):
 
         n = len(self._keys)
 
-        messages = self.get_valid_messages(prompt=prompt, history=history, max_tokens=max_tokens)
+        messages = self._get_valid_messages(prompt=prompt, history=history, max_tokens=max_tokens)
 
         data = {
             "model": model,
@@ -46,11 +50,13 @@ class OaiLLM(LLM):
                     ) -> Iterator[str]:
         def response_to_string(completion):
             for i in completion:
-                yield i.
+                yield i.choices[0].delta.content
 
         n = len(self._keys)
 
-        messages = self.get_valid_messages(prompt=prompt, history=history, max_tokens=max_tokens)
+        messages = self._get_valid_messages(prompt=prompt, history=history, max_tokens=max_tokens)
+        for i in messages:
+            print(i)
 
         data = {
             "model": model,
@@ -62,7 +68,7 @@ class OaiLLM(LLM):
             client = OpenAI(api_key=self._keys[self.key_index])
             try:
                 completion = client.chat.completions.create(**data)
-                return self.response_to_string(completion)
+                return response_to_string(completion)
 
             except (Exception,):
                 self.key_index = (self.key_index + 1) % n
