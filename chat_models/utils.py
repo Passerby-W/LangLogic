@@ -1,4 +1,4 @@
-from llms.base import Massage
+from chat_models.base import Massage
 from typing import List
 
 

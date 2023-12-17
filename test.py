@@ -1,7 +1,7 @@
 import sys
 import time
 
-from llms import OaiLLM
+from chat_models import OaiLLM
 
 
 keys = ["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"]

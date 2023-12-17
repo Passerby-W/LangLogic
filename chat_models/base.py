@@ -1,15 +1,16 @@
 from abc import ABC, abstractmethod
-from typing import TypedDict, List, Literal, Iterator
+from typing import TypedDict, List, Literal, Iterator, Optional
 
 
 class Massage(TypedDict):
     role: Literal["system", "user", "assistant"]
+    name: Optional[str] = str
     content: str
 
 
-class LLM(ABC):
+class ChatBase(ABC):
     def __init__(self):
-        self.name = "base"
+        self.name = "base llm"
 
     @abstractmethod
     def chat(self, prompt: str, history: List[Massage], max_memory_token: int, **kwargs) -> str:

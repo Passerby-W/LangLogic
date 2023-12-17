@@ -1,10 +1,10 @@
 from typing import List, Literal, Iterator
-from llms.base import LLM, Massage
+from chat_models.base import ChatBase, Massage
 from openai import OpenAI
 import tiktoken
 
 
-class OaiLLM(LLM):
+class ChatOpenai(ChatBase):
     def __init__(self, keys: List[str]):
         super().__init__()
         self.name = "openai"
