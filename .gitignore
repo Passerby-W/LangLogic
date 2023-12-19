@@ -1,3 +1,4 @@
-.idea/
-__pycache__/
-test/*
+*
+!README.md
+chat_models/*
+embedding_models/*
