@@ -1,1 +1,1 @@
-from .oai import LLM, OaiLLM
+from .oai import ChatOpenai
