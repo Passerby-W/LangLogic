@@ -2,7 +2,7 @@ import time
 from chat_models import ChatOpenai
 
 keys = [
-    "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",
+    "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",
 ]
 
 llm = ChatOpenai(keys=keys)

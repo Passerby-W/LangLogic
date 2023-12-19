@@ -8,7 +8,7 @@ import tiktoken
 class ChatOpenai(ChatBase):
     def __init__(self, keys: List[str]):
         super().__init__()
-        self.name = "openai"
+        self.name = "OpenAI Chat Model"
         self._keys = keys
         self.key_index = 0
         self._encoding = tiktoken.get_encoding("cl100k_base")
@@ -50,7 +50,7 @@ class ChatOpenai(ChatBase):
                 self.key_index = (self.key_index + 1) % n
 
         errors_info = "\n".join(errors)
-        raise ValueError(f"[Chat]-OAI_LLM: All keys are invalid. The error message for the key is as follows: \n{errors_info}")
+        raise ValueError(f"[Chat]-OpenAI: All keys are invalid. The error message for the key is as follows: \n{errors_info}")
 
     def chat_stream(self,
                     prompt: str,
@@ -89,4 +89,4 @@ class ChatOpenai(ChatBase):
                 self.key_index = (self.key_index + 1) % n
 
         errors_info = "\n".join(errors)
-        raise ValueError(f"[Chat Stream]-OAI_LLM: All keys are invalid. The error message for the key is as follows: \n{errors_info}")
+        raise ValueError(f"[Chat Stream]-Openai: All keys are invalid. The error message for the key is as follows: \n{errors_info}")
