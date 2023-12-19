@@ -1,4 +1,6 @@
 *
 !README.md
-chat_models/*
-embedding_models/*
+!chat_models/
+!chat_models/*
+!embedding_models/
+!embedding_models/*
