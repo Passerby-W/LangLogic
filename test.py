@@ -1,21 +1,25 @@
-import sys
 import time
 
-from chat_models import OaiLLM
+from chat_models import ChatOpenai
 
+keys = ["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"]
 
-keys = ["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"]
-
-llm = OaiLLM(keys=keys)
+llm = ChatOpenai(keys=keys)
 
 messages = [{"role": "system", "content": "你是大诗人"}]
 
 # for i in range(100):
 #     messages.append({"role": "user", "content": f"{i}"})
 
-a = llm.chat(prompt="给我写一个赞美唐美女的诗歌，要求字数不低于60字，并解释下这首诗的意境和表达的感情", history=messages, max_tokens=60)
-# print(a)
-for aa in a:
-    print(aa, end="")
-    # time.sleep(1)
-    # sys.stdout.flush()
+t1 = time.time()
+a = llm.chat(prompt="给我写一个赞美唐美女的诗歌，要求字数不低于60字，并解释下这首诗的意境和表达的感情", history=messages, max_memory_tokens=60)
+t2 = time.time()
+print(a)
+print(t2 - t1)
+
+b = llm.chat_stream(prompt="给我写一个赞美唐美女的诗歌，要求字数不低于60字，并解释下这首诗的意境和表达的感情", history=messages, max_memory_tokens=60)
+for bb in b:
+    print(bb, end="")
+t3 = time.time()
+print(a)
+print(t3 - t2)
